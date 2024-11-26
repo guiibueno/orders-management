@@ -48,7 +48,7 @@ A comunicação entre os serviços é realizada por eventos assíncronos, utiliz
         "city": "São Paulo",
         "state": "SP",
         "country": "Brazil",
-        "zipcode": 00000000
+        "zipcode": "00000000"
       }
     }
   }
