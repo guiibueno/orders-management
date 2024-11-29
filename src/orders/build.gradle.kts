@@ -34,6 +34,7 @@ dependencies {
 	implementation("org.springframework.kafka:spring-kafka")
 	implementation("io.micrometer:micrometer-core")
 	implementation("io.micrometer:micrometer-registry-prometheus")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 

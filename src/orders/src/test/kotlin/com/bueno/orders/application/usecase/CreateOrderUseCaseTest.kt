@@ -5,11 +5,13 @@ import com.bueno.orders.application.dto.request.OrderDelivery
 import com.bueno.orders.application.dto.request.OrderDeliveryAddress
 import com.bueno.orders.application.dto.request.OrderItems
 import com.bueno.orders.application.mapper.OrderMapper
+import com.bueno.orders.application.port.output.EventBusOutputPort
 import com.bueno.orders.application.port.output.OrderOutputPort
 import com.bueno.orders.domain.entity.Delivery
 import com.bueno.orders.domain.entity.Inventory
 import com.bueno.orders.domain.entity.Order
 import com.bueno.orders.domain.entity.Payment
+import com.bueno.orders.domain.event.CreatedOrderEvent
 import com.bueno.orders.domain.valueobject.InventoryStatus
 import com.bueno.orders.domain.valueobject.OrderStatus
 import com.bueno.orders.domain.valueobject.PaymentStatus
@@ -30,14 +32,18 @@ class CreateOrderUseCaseTest {
 
     @MockK
     private lateinit var orderOutputPort: OrderOutputPort
+    @MockK
+    private lateinit var eventBusOutputPort: EventBusOutputPort
 
     private var createOrderUseCase: CreateOrderUseCase
 
     init {
         MockKAnnotations.init(this)
         createOrderUseCase = spyk(
-            CreateOrderUseCase(orderOutputPort, orderMapper)
+            CreateOrderUseCase(orderOutputPort, orderMapper, eventBusOutputPort)
         )
+
+        every { eventBusOutputPort.send<CreatedOrderEvent>(any()) } returns Unit
     }
 
     @Test
@@ -61,6 +67,7 @@ class CreateOrderUseCaseTest {
 
         coVerify (exactly = 1) {
             orderOutputPort.save(any())
+            eventBusOutputPort.send<CreatedOrderEvent>(any())
         }
     }
 
@@ -76,6 +83,10 @@ class CreateOrderUseCaseTest {
 
         coVerify (exactly = 1) {
             orderOutputPort.save(any())
+        }
+
+        coVerify (exactly = 0) {
+            eventBusOutputPort.send<CreatedOrderEvent>(any())
         }
     }
 

@@ -32,3 +32,17 @@ spring:
       bootstrap-servers: ${KAFKA_HOST:localhost}:${KAFKA_PORT:9092}
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+topics:
+  order:
+    events:
+      name: order-events
+  inventory:
+    events:
+      name: inventory-events
+  payment:
+    events:
+      name: payment-events
+  notification:
+    events:
+      name: notification-events
