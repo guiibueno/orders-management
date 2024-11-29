@@ -7,8 +7,10 @@ import com.bueno.orders.application.dto.request.OrderItems
 import com.bueno.orders.application.mapper.OrderMapper
 import com.bueno.orders.application.port.output.OrderOutputPort
 import com.bueno.orders.domain.entity.Delivery
+import com.bueno.orders.domain.entity.Inventory
 import com.bueno.orders.domain.entity.Order
 import com.bueno.orders.domain.entity.Payment
+import com.bueno.orders.domain.valueobject.InventoryStatus
 import com.bueno.orders.domain.valueobject.OrderStatus
 import com.bueno.orders.domain.valueobject.PaymentStatus
 import io.mockk.MockKAnnotations
@@ -44,6 +46,7 @@ class CreateOrderUseCaseTest {
         val order = Order(id = BigInteger("1"),
             status = OrderStatus.PENDING,
             payment = Payment(PaymentStatus.PENDING),
+            inventory = Inventory(InventoryStatus.PENDING),
             items = orderMapper.convertToDomain(request.items),
             delivery = Delivery(orderMapper.convertToDomain(request.delivery.address)))
 

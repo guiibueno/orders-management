@@ -1,5 +1,6 @@
 package com.bueno.orders.domain.entity
 
+import com.bueno.orders.domain.valueobject.InventoryStatus
 import com.bueno.orders.domain.valueobject.OrderStatus
 import com.bueno.orders.domain.valueobject.PaymentStatus
 import org.springframework.data.annotation.Id
@@ -8,10 +9,11 @@ import java.math.BigInteger
 data class Order(@Id val id: BigInteger?,
                  val status: OrderStatus,
                  val payment: Payment,
+                 val inventory: Inventory,
                  val items: List<OrderItem>,
                  val delivery: Delivery) {
 
-    constructor(items: List<OrderItem>, delivery: Delivery) : this (null, OrderStatus.PENDING, Payment(PaymentStatus.PENDING), items, delivery)
+    constructor(items: List<OrderItem>, delivery: Delivery) : this (null, OrderStatus.PENDING, Payment(PaymentStatus.PENDING), Inventory(InventoryStatus.PENDING), items, delivery)
 
     init {
         validate()

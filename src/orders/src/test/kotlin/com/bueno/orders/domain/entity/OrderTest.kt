@@ -1,5 +1,6 @@
 package com.bueno.orders.domain.entity
 
+import com.bueno.orders.domain.valueobject.InventoryStatus
 import com.bueno.orders.domain.valueobject.OrderStatus
 import com.bueno.orders.domain.valueobject.PaymentStatus
 import org.junit.jupiter.api.Test
@@ -27,6 +28,7 @@ class OrderTest {
         // Verificando os campos do pedido
         assertEquals(OrderStatus.PENDING, order.status)
         assertEquals(PaymentStatus.PENDING, order.payment.status)
+        assertEquals(InventoryStatus.PENDING, order.inventory.status)
     }
 
     // Teste para quando a lista de itens estiver vazia
