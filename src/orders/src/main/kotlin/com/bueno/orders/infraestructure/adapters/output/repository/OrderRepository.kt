@@ -7,5 +7,5 @@ import java.math.BigInteger
 
 @Repository
 interface OrderRepository: MongoRepository<Order, BigInteger> {
-
+    fun findByStatus(status: String): List<Order>
 }

@@ -14,6 +14,7 @@ class OrderTest {
     @Test
     fun `should create order with valid status and payment`() {
         val order = Order(
+            customerId = BigInteger("1"),
             items = listOf(OrderItem(id = BigInteger("1"), quantity = 2)),
             delivery = Delivery(address = Address(
                 street = "Rua Teste",
@@ -36,6 +37,7 @@ class OrderTest {
     fun `should throw exception when items list is empty`() {
         assertThrows<IllegalArgumentException> {
             Order(
+                customerId = BigInteger("1"),
                 items = emptyList(),
                 delivery = Delivery(address = Address(
                     street = "Rua Teste",

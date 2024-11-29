@@ -35,7 +35,7 @@ class OrderRestAdapter(
     }
 
     @GetMapping("")
-    fun findAll(@RequestParam status: OrderStatus): ResponseEntity<List<OrderListItem>> {
+    fun findAll(@RequestParam status: OrderStatus?): ResponseEntity<List<OrderListItem>> {
         val result = orderFinderPort.findAll(status)
         if(result.isNotEmpty())
             return ResponseEntity(result, HttpStatus.OK)

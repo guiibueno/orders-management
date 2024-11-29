@@ -5,6 +5,7 @@ import com.bueno.orders.infraestructure.adapters.output.repository.OrderReposito
 import org.springframework.data.repository.findByIdOrNull
 import java.math.BigInteger
 import com.bueno.orders.application.port.output.OrderOutputPort
+import com.bueno.orders.domain.valueobject.OrderStatus
 import org.springframework.stereotype.Service
 
 @Service
@@ -19,4 +20,10 @@ class OrderPersistenceAdapter (
         return repository.findByIdOrNull(id)
     }
 
+    override fun getAll(status: OrderStatus?) : List<Order> {
+        if(status == null)
+            return repository.findAll()
+
+        return repository.findByStatus(status.toString())
+    }
 }

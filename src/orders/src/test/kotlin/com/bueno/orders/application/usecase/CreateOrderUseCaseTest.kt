@@ -44,6 +44,7 @@ class CreateOrderUseCaseTest {
     fun `should create order successfully`() {
         val request = createMockCreateOrderRequest()
         val order = Order(id = BigInteger("1"),
+            customerId = BigInteger("1"),
             status = OrderStatus.PENDING,
             payment = Payment(PaymentStatus.PENDING),
             inventory = Inventory(InventoryStatus.PENDING),

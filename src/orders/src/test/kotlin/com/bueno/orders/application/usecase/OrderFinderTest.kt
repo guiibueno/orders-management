@@ -32,6 +32,7 @@ class OrderFinderTest {
     fun `should return data when order is found`() {
         val orderId = BigInteger("1")
         val order = Order(id = BigInteger("1"),
+            customerId = BigInteger("1"),
             status = OrderStatus.PENDING,
             payment = Payment(PaymentStatus.PENDING),
             inventory = Inventory(InventoryStatus.PENDING),

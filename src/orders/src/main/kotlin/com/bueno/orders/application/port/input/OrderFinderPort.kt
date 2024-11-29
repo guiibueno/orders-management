@@ -7,5 +7,5 @@ import java.math.BigInteger
 
 interface OrderFinderPort {
     fun findById(id: BigInteger): OrderDto?
-    fun findAll(status: OrderStatus): List<OrderListItem>
+    fun findAll(status: OrderStatus?): List<OrderListItem>
 }

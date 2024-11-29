@@ -1,7 +1,6 @@
 package com.bueno.orders.application.mapper
 
 import com.bueno.orders.application.dto.request.CreateOrderRequest
-import com.bueno.orders.application.dto.request.OrderDelivery
 import com.bueno.orders.application.dto.request.OrderDeliveryAddress
 import com.bueno.orders.application.dto.request.OrderItems
 import com.bueno.orders.application.dto.response.OrderDto
@@ -17,7 +16,7 @@ class OrderMapper {
         val address = convertToDomain(dto.delivery.address)
         val items = convertToDomain(dto.items)
 
-        return Order(items, Delivery(address))
+        return Order(dto.customerId, items, Delivery(address))
     }
 
     fun convertToDomain(dto: OrderDeliveryAddress) : Address {

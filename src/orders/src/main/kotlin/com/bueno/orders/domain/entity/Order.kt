@@ -7,13 +7,14 @@ import org.springframework.data.annotation.Id
 import java.math.BigInteger
 
 data class Order(@Id val id: BigInteger?,
+                 val customerId: BigInteger,
                  val status: OrderStatus,
                  val payment: Payment,
                  val inventory: Inventory,
                  val items: List<OrderItem>,
                  val delivery: Delivery) {
 
-    constructor(items: List<OrderItem>, delivery: Delivery) : this (null, OrderStatus.PENDING, Payment(PaymentStatus.PENDING), Inventory(InventoryStatus.PENDING), items, delivery)
+    constructor(customerId: BigInteger, items: List<OrderItem>, delivery: Delivery) : this (null, customerId, OrderStatus.PENDING, Payment(PaymentStatus.PENDING), Inventory(InventoryStatus.PENDING), items, delivery)
 
     init {
         validate()

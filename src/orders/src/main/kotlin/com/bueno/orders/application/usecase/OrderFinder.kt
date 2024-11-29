@@ -20,7 +20,11 @@ class OrderFinder (
         return orderMapper.convertToDto(order)
     }
 
-    override fun findAll(status: OrderStatus): List<OrderListItem> {
-        TODO("Not yet implemented")
+    override fun findAll(status: OrderStatus?): List<OrderListItem> {
+        val orders = orderOutputPort.getAll(status)
+
+        return orders.map {
+            OrderListItem(it.id!!, it.status, it.customerId)
+        }
     }
 }
