@@ -15,7 +15,9 @@ class OrderFinder (
     val orderMapper: OrderMapper
 ) : OrderFinderPort {
     override fun findById(id: BigInteger): OrderDto? {
-        TODO("Not yet implemented")
+        val order = orderOutputPort.getById(id) ?: return null
+
+        return orderMapper.convertToDto(order)
     }
 
     override fun findAll(status: OrderStatus): List<OrderListItem> {
