@@ -1,4 +1,4 @@
-package com.bueno.orders.infraestructure.adapters.output.repository
+package com.bueno.orders.infraestructure.adapters.output.persistence.repository
 
 import com.bueno.orders.domain.entity.Order
 import org.springframework.data.mongodb.repository.MongoRepository

@@ -1,7 +1,7 @@
-package com.bueno.orders.infraestructure.adapters.output
+package com.bueno.orders.infraestructure.adapters.output.persistence
 
 import com.bueno.orders.domain.entity.Order
-import com.bueno.orders.infraestructure.adapters.output.repository.OrderRepository
+import com.bueno.orders.infraestructure.adapters.output.persistence.repository.OrderRepository
 import org.springframework.data.repository.findByIdOrNull
 import java.math.BigInteger
 import com.bueno.orders.application.port.output.OrderOutputPort
