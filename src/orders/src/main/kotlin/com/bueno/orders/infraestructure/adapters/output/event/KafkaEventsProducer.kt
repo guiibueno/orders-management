@@ -4,6 +4,7 @@ import com.bueno.orders.application.port.output.EventBusOutputPort
 import com.bueno.orders.domain.entity.Order
 import com.bueno.orders.domain.event.CreatedOrderEvent
 import com.bueno.orders.domain.event.Event
+import com.bueno.orders.domain.event.UpdatedOrderEvent
 import com.bueno.orders.infraestructure.adapters.output.event.KafkaEventsProducer.EventAsyncDispatcher.publishEventAsync
 import kotlinx.coroutines.CoroutineName
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +23,11 @@ import java.util.concurrent.Executors
 class KafkaEventsProducer (
     @Value("\${topics.order.events.name}")
     private val orderEventsTopic: String,
-    private val kafkaOrdersEventTemplate: KafkaTemplate<String, Event<Order>>
+    private val kafkaOrdersEventTemplate: KafkaTemplate<String, CreatedOrderEvent>,
+
+    @Value("\${topics.notification.events.name}")
+    private val notificationEventsTopic: String,
+    private val kafkaNotificationsEventTemplate: KafkaTemplate<String, UpdatedOrderEvent>
 ) : EventBusOutputPort {
     private val logger = LoggerFactory.getLogger(this::class.java)
 
@@ -31,10 +36,11 @@ class KafkaEventsProducer (
             try {
                 when(event){
                     is CreatedOrderEvent -> send(event)
+                    is UpdatedOrderEvent -> send(event)
                     else -> logger.error("No event producer for type ${event.javaClass} was founded!")
                 }
 
-                logger.info("New event sent successfully.")
+                logger.info("New event(${event.javaClass.simpleName}) sent successfully.")
             }
             catch (ex: Exception){
                 logger.error("Unable to send event.", ex)
@@ -43,7 +49,11 @@ class KafkaEventsProducer (
     }
 
     fun send (event: CreatedOrderEvent){
-        kafkaOrdersEventTemplate.send(orderEventsTopic, event)
+        kafkaOrdersEventTemplate.send(notificationEventsTopic, event)
+    }
+
+    fun send (event: UpdatedOrderEvent){
+        kafkaNotificationsEventTemplate.send(orderEventsTopic, event)
     }
 
     object EventAsyncDispatcher {

@@ -12,6 +12,7 @@ import com.bueno.orders.domain.entity.Inventory
 import com.bueno.orders.domain.entity.Order
 import com.bueno.orders.domain.entity.Payment
 import com.bueno.orders.domain.event.CreatedOrderEvent
+import com.bueno.orders.domain.event.UpdatedOrderEvent
 import com.bueno.orders.domain.valueobject.InventoryStatus
 import com.bueno.orders.domain.valueobject.OrderStatus
 import com.bueno.orders.domain.valueobject.PaymentStatus
@@ -44,6 +45,7 @@ class CreateOrderUseCaseTest {
         )
 
         every { eventBusOutputPort.send<CreatedOrderEvent>(any()) } returns Unit
+        every { eventBusOutputPort.send<UpdatedOrderEvent>(any()) } returns Unit
     }
 
     @Test
@@ -67,7 +69,10 @@ class CreateOrderUseCaseTest {
 
         coVerify (exactly = 1) {
             orderOutputPort.save(any())
+        }
+        coVerify (atLeast = 1) {
             eventBusOutputPort.send<CreatedOrderEvent>(any())
+            eventBusOutputPort.send<UpdatedOrderEvent>(any())
         }
     }
 

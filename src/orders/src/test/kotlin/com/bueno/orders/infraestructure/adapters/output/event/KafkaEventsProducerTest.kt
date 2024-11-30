@@ -7,6 +7,7 @@ import com.bueno.orders.domain.entity.Order
 import com.bueno.orders.domain.entity.OrderItem
 import com.bueno.orders.domain.event.CreatedOrderEvent
 import com.bueno.orders.domain.event.Event
+import com.bueno.orders.domain.event.UpdatedOrderEvent
 import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.every
@@ -21,18 +22,22 @@ import kotlin.test.Test
 class KafkaEventsProducerTest {
 
     private val orderEventsTopic = "orders-events-topic"
-
+    private val notificationEventsTopic = "notifications-events-topic"
     @MockK
-    private lateinit var kafkaOrdersEventTemplate: KafkaTemplate<String, Event<Order>>
+    private lateinit var kafkaOrdersEventTemplate: KafkaTemplate<String, CreatedOrderEvent>
+    @MockK
+    private lateinit var kafkaNotificationsEventTemplate: KafkaTemplate<String, UpdatedOrderEvent>
+
     private var producer: KafkaEventsProducer
 
     init {
         MockKAnnotations.init(this)
         producer = spyk(
-            KafkaEventsProducer(orderEventsTopic, kafkaOrdersEventTemplate)
+            KafkaEventsProducer(orderEventsTopic, kafkaOrdersEventTemplate, notificationEventsTopic, kafkaNotificationsEventTemplate)
         )
 
-        every { kafkaOrdersEventTemplate.send(orderEventsTopic, any()) } returns CompletableFuture<SendResult<String, Event<Order>>>()
+        every { kafkaOrdersEventTemplate.send(any(), any()) } returns CompletableFuture<SendResult<String, CreatedOrderEvent>>()
+        every { kafkaNotificationsEventTemplate.send(any(), any()) } returns CompletableFuture<SendResult<String, UpdatedOrderEvent>>()
     }
 
     @Test
@@ -55,7 +60,7 @@ class KafkaEventsProducerTest {
         producer.send(createdOrderEvent)
 
         coVerify (atLeast = 1, timeout = 300) {
-            kafkaOrdersEventTemplate.send(orderEventsTopic, any())
+            kafkaOrdersEventTemplate.send(any(), any())
         }
     }
 }
