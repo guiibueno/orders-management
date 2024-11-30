@@ -1,9 +1,8 @@
 package com.bueno.orders.infraestructure.adapters.input.rest
 
 import com.bueno.orders.application.dto.request.CreateOrderRequest
-import com.bueno.orders.application.dto.response.CreateOrderResponse
-import com.bueno.orders.application.dto.response.OrderDto
-import com.bueno.orders.application.dto.response.OrderListItem
+import com.bueno.orders.application.dto.response.*
+import com.bueno.orders.application.port.input.CancelOrderPort
 import com.bueno.orders.application.port.input.CreateOrderPort
 import com.bueno.orders.application.port.input.OrderFinderPort
 import com.bueno.orders.domain.valueobject.OrderStatus
@@ -16,7 +15,8 @@ import java.math.BigInteger
 @RequestMapping("/orders")
 class OrderRestAdapter(
     val createOrderPort: CreateOrderPort,
-    val orderFinderPort: OrderFinderPort
+    val orderFinderPort: OrderFinderPort,
+    val cancelOrderPort: CancelOrderPort
 ) {
     @PostMapping("")
     fun create(@RequestBody request: CreateOrderRequest): ResponseEntity<CreateOrderResponse?> {
@@ -41,5 +41,17 @@ class OrderRestAdapter(
             return ResponseEntity(result, HttpStatus.OK)
 
         return ResponseEntity(null, HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{id}/cancel")
+    fun cancel(@PathVariable id: BigInteger): ResponseEntity<CancelOrderResponse> {
+        val response = cancelOrderPort.invoke(id) ?: return ResponseEntity(null, HttpStatus.NOT_FOUND)
+
+        val statusCode = when (response.status) {
+            CancelOrderStatus.CANCELED -> HttpStatus.OK
+            CancelOrderStatus.ERROR -> HttpStatus.BAD_REQUEST
+        }
+
+        return ResponseEntity(response, statusCode)
     }
 }

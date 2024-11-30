@@ -8,7 +8,7 @@ import java.math.BigInteger
 
 data class Order(@Id val id: BigInteger?,
                  val customerId: BigInteger,
-                 val status: OrderStatus,
+                 var status: OrderStatus,
                  val payment: Payment,
                  val inventory: Inventory,
                  val items: List<OrderItem>,
@@ -24,5 +24,14 @@ data class Order(@Id val id: BigInteger?,
         require(status in OrderStatus.entries.toTypedArray()) { "Status de pedido inválido: $status" }
 
         require(items.isNotEmpty()) { "O pedido deve ter pelo menos um item." }
+    }
+
+    fun updateStatus(newStatus: OrderStatus): Pair<Boolean, String> {
+        if(payment.status != PaymentStatus.PENDING && newStatus == OrderStatus.CANCELED)
+            return Pair<Boolean, String>(false, "Invalid payment status.")
+
+        status = OrderStatus.CANCELED
+
+        return Pair<Boolean, String>(true, "")
     }
 }
